@@ -11,36 +11,51 @@
 # можно попробовать проанализировать и понять какой пользователь Телеграмм соответсвует Учатнику ICO или Advisor
 
 from telethon import TelegramClient
-import pymongo
 import re
 import socks
 from pymongo import MongoClient
 
 
 CLIENT = MongoClient('localhost', 27017)
-MONGO_DB = CLIENT.hhru  # Название базы данных: ico
-collection_hhru = MONGO_DB.people  # Название коллекции документов: hhru
+MONGO_DB = CLIENT.ico  # Название базы данных: ico
+documents = MONGO_DB.icobench  # Название коллекции документов
 
-proxy = {
-    'server': '192.169.249.49',
-    'port': 62644,
-    'login': '',
-    'pass': '',
-}
+
+re_tg_link = re.compile('http(s?):\/\/(t.me|telegram.me)\/[\d?=\-_a-zA-Z]+')
+
+result = documents.find({"ico_socials": {'$regex': re_tg_link}})
+
+tg_links = []
+for itm in result:
+    a = itm['ico_socials']
+    for i in a:
+        if re.fullmatch(re_tg_link, i):
+            tg_links.append(i)
+
+print(tg_links)
+
+
+# Стучимся в телегу
 api_id = 777269
 api_hash = '528cba48d3ea90a3afa789f6790c1ed0'
 
+proxy = {
+    'server_ip': '138.128.118.100',
+    'server_port': 42970,
+    'login': '',
+    'pass': '',
+}
 
 client = TelegramClient('che1', api_id, api_hash,
-                        proxy=(socks.SOCKS5, '192.169.249.49', 62644, True))
+                        proxy=(socks.SOCKS5, proxy['server_ip'], proxy['server_port'], True))
 
 client.start()
 dialogs = client.get_dialogs()
 
 print(dialogs[0])
 
-print(23232)
-
+print('*'*8, 'DONE', '*'*8)
+#
 urls = []
 re_path = re.compile(r'http(s?):\/\/[\da-z-_]+.[a-z]+\/?[\d\?=\-_a-zA-Z]+')
 
