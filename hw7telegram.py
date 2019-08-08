@@ -21,17 +21,6 @@ CLIENT = MongoClient('localhost', 27017)
 MONGO_DB = CLIENT.hhru  # Название базы данных: ico
 collection_hhru = MONGO_DB.people  # Название коллекции документов: hhru
 
-
-# api_hash = '528cba48d3ea90a3afa789f6790c1ed0'
-# api_id = 777269
-# pxi_server = 'ru.socksy.seriyps.ru'
-# pxi_port = 7777  #Test configuration: 149.154.167.40:443telecheteche
-# login = 'tg-gefestmarsh'
-# pxi_secret = 'vR2YXk4d'
-#
-# client = TelegramClient('che', api_id, api_hash,
-#                         proxy=(socks.SOCKS5, pxi_server, pxi_port, True, login, pxi_secret))api_hash = '528cba48d3ea90a3afa789f6790c1ed0'
-
 proxy = {
     'server': '192.169.249.49',
     'port': 62644,
